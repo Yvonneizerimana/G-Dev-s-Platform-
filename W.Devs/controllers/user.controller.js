@@ -223,7 +223,26 @@ logout: (req, res) => {
         console.error('Error resetting password:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
-  }
+  },
+
+  listUsers:asyncWrapper(async(req,res,next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array()[0].msg));
+    }
+    const foundUser = await userModel.find();
+    if (foundUser) {
+        return res.status(200).json({
+            numberOfUsers: foundUser.length,
+            listOfUsers: foundUser
+        });
+    }
+    else{
+        return res.status(404).json({
+            message: "User account not found!",
+        });
+    }
+})
 
 }
 

@@ -1,6 +1,7 @@
 import userController from "../controllers/user.controller.js";
 import authValidation from "../middlewares/authValidation.js"
 import { otpValidation } from "../utils/validation.js";
+import checkUsers from "../utils/authCheck.js";
 import express from 'express';
 const app= express();
 app.use(express.json)
