@@ -1,4 +1,4 @@
-import adminModel from "../models/admin.model.js";
+import userModel from "../models/user.model.js";
 import { validationResult } from "express-validator";
 import asyncWrapper from "../errors/async.js";
 import { NotFoundError, BadRequestError } from "../errors/index.js";
@@ -8,13 +8,13 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 
 
-export const admin = {
-    createAdmin: asyncWrapper(async (req, res, next) => {
+export const users = {
+    createUser: asyncWrapper(async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return next(new BadRequestError(errors.array()[0].msg));
         }
-        const foundUser = await adminModel.findOne({ email: req.body.email });
+        const foundUser = await userModel.findOne({ email: req.body.email });
     if (foundUser) {
         return next(new BadRequestError("Email already in use"));
     };
@@ -28,9 +28,9 @@ export const admin = {
                     return otp
                 }
                 const otp=otpGenerator()
-                adminModel.otpExpires=Date.now() + 8 * 60 * 1000;
+                userModel.otpExpires=Date.now() + 8 * 60 * 1000;
                 
-                const addAdmin = new adminModel({
+                const addUser = new userModel({
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: req.body.email,
@@ -42,7 +42,7 @@ export const admin = {
                     
                 });
             
-                const savedUser = await addAdmin.save();
+                const savedUser = await addUser.save();
 
                 //sending email containing otp
                 const sendGridKey = configurations.SENDGRID_KEY;
@@ -80,7 +80,7 @@ ValidateOpt:asyncWrapper(async(req,res,next)=>{
         }
     
         // Checking if the given opt is stored in our database
-        const foundUser = await adminModel.findOne({ otp: req.body.otp });
+        const foundUser = await userModel.findOne({ otp: req.body.otp });
         if (!foundUser) {
             next(new UnauthorizedError('Authorization denied'));
         };
@@ -112,7 +112,7 @@ ValidateOpt:asyncWrapper(async(req,res,next)=>{
             throw new Error('Please provide email as username and password');
           }
     
-          const user = await adminModel.findOne({ email });
+          const user = await userModel.findOne({ email });
           if (!user) {
             res.status(401).json({ message: "Invalid username or password" });
             return;
@@ -155,7 +155,7 @@ logout: (req, res) => {
   forgotPassword: async (req, res, next) => {
     const { email } = req.body;
     try {
-      const user = await adminModel.findOne({ email });
+      const user = await userModel.findOne({ email });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -196,7 +196,7 @@ logout: (req, res) => {
   
     try {
         // Find user by reset token
-        const user = await adminModel.findOne({ resetToken: token });
+        const user = await userModel.findOne({ resetToken: token });
   
         if (!user) {
             return res.status(400).json({ message: 'Invalid or expired token' });
@@ -227,4 +227,4 @@ logout: (req, res) => {
 
 }
 
-export default admin;
+export default users;
