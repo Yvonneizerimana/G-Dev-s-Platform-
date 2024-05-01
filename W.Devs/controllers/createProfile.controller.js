@@ -1,14 +1,14 @@
 import asyncWrapper from "../errors/async.js";
 import profileModel from "../models/createProfile.model.js";
-// import { validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 
 const profileController = {
     createProfile: asyncWrapper(async (req, res, next) => {
         // Check for validation errors
-        // const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     return res.status(400).json({ errors: errors.array() });
-        // }
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
         try {
             // Ensure all required fields are present in the request body
