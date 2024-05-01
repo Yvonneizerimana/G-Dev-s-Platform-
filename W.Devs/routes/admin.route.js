@@ -15,6 +15,8 @@ adminRouter.route('/verify').post(otpValidation, adminController.ValidateOpt);
 adminRouter.route('/login').post(adminController.loginUser);
 adminRouter.route('/forgotPassword').post(adminController.forgotPassword)
 adminRouter.route('/resetPassword/:resetToken').post(adminController.resetPassword)
+adminRouter.route('/logout').get(adminController.logout);
+
 
 adminRouter.route('/listOfUsers').get(checkUsers.admin,userController.listUsers)
 

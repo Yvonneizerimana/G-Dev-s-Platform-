@@ -14,5 +14,6 @@ userRouter.route('/verify').post(otpValidation, userController.ValidateOpt);
 userRouter.route('/login').post(userController.loginUser);
 userRouter.route('/forgotPassword').post(userController.forgotPassword)
 userRouter.route('/resetPassword/:resetToken').post(userController.resetPassword)
+userRouter.route('/logout').get(userController.logout);
 
 export default userRouter

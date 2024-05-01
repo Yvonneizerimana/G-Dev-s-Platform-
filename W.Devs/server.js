@@ -9,6 +9,7 @@ database();
 port(app);
 
 
+console.log(Date.now()); 
 
 
 

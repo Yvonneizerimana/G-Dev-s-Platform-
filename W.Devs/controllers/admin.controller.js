@@ -6,6 +6,7 @@ import sgMail from '@sendgrid/mail';
 import configurations from '../configs/index.js'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
 
 
 export const admin = {
@@ -104,44 +105,52 @@ ValidateOpt:asyncWrapper(async(req,res,next)=>{
 
 //user sign in
 
-    loginUser: async (req, res, next) => {
-        const { email, password } = req.body;
-        try {
-          if (!email || !password) {
-            res.status(400);
-            throw new Error('Please provide email as username and password');
-          }
-    
-          const user = await adminModel.findOne({ email });
-          if (!user) {
-            res.status(401).json({ message: "Invalid username or password" });
-            return;
-          }
-          
-          const passwordValid = await bcrypt.compareSync(password, user.password);
-     
-            if (!passwordValid) {
-                res.status(401).json({ message: "Invalid  password" });
-                
-                return;
-            }
-          if (user && passwordValid) {
-            const accessToken = jwt.sign({
-              email: user.email,
-              id: user._id
-            }, configurations.TOOKEN_SECRETE, { expiresIn: "30m" });
-    
-            const options = {
-              expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-              httpOnly: true
-            };
-            res.status(200).cookie("token", accessToken, options).send(`Your Welcome to the platform ${user.firstName + " "+user.lastName}` );
-          }
-        } catch (err) {
-          console.error(err.message);
-          res.status(500).json({ message: "Internal server error" });
-        }
-      },
+loginUser: async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    // Check if email and password are provided
+    if (!email || !password) {
+      res.status(400);
+      throw new Error('Please provide email and password');
+    }
+
+    // Find user by email
+    const user = await adminModel.findOne({ email });
+    if (!user) {
+      res.status(401).json({ message: "Invalid username or password" });
+      return;
+    }
+    if(user.verified!==true){
+      res.status(401).json({ message: "Please verify your account" });
+      return;
+
+    }
+
+    // Compare hashed password with user input
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!passwordValid) {
+      res.status(401).json({ message: "Invalid password" });
+      return;
+    }
+
+    // If user and password are valid, generate JWT token
+    const accessToken = jwt.sign({
+      email: user.email,
+      id: user._id
+    },"yvonne123",{ expiresIn: "30m" });
+
+    // Set token as a cookie
+    const options = {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      httpOnly: true
+    };
+    res.status(200).cookie("token", accessToken, options).send(`Welcome to the platform ${user.firstName} ${user.lastName}`);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+  },
+
 
 //logout
 
