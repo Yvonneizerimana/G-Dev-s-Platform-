@@ -22,7 +22,7 @@ const checkUsers={
             }
 
             if (user.role !== "admin") {
-                return res.status(403).json({ success: false, message: "Access denied" });
+                return res.status(403).json({ success: false, message: "Access denied you're not authorized as admin" });
             }
 
     
@@ -57,7 +57,7 @@ user:async (req, res, next) => {
             }
 
             if (user.role !== "user") {
-                return res.status(403).json({ success: false, message: "Access denied" });
+                return res.status(403).json({ success: false, message: "Access denied you're not authorized as a user" });
             }
 
     

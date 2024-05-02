@@ -63,6 +63,14 @@ const profileSchema = new Schema({
             required: true
         }
     },
+    selectLanguage: {
+        type: String,
+        required: true,
+        enum: {
+            values: ['C', 'C++', 'Java', 'Python', 'JavaScript', 'PHP', 'Ruby', 'C#', 'Go', 'Swift', 'Kotlin', 'Rust'],
+            message: "Invalid language selected: {VALUE}"
+        }
+    },
     selectLevelOfCoding: {
         type: String,
         required: true,
@@ -74,6 +82,10 @@ const profileSchema = new Schema({
     completeChallenge: {
         type: String,
         required: false
+    },
+    codewarUsername:{
+        type:String,
+        required:true
     },
     uploadDocuments: {
         type: Array,

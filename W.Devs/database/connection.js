@@ -7,6 +7,7 @@ export default function(){
         console.log('databse connected successfully');
     })
     .catch((error)=>{
-        console.log("failed to connect to databse")
+        console.log("failed to connect to database")
+        console.log(error.message);
     })
 }
