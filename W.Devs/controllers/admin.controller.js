@@ -1,4 +1,5 @@
 import adminModel from "../models/admin.model.js";
+import profileModel from "../models/createProfile.model.js";
 import { validationResult } from "express-validator";
 import asyncWrapper from "../errors/async.js";
 import { NotFoundError, BadRequestError } from "../errors/index.js";
@@ -232,7 +233,37 @@ logout: (req, res) => {
         console.error('Error resetting password:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
+  },
+
+  listOfAllUsers: async(req,res,next)=>{
+  const allUsers=await profileModel.find();
+  if(allUsers){
+    return res.status(200).json({
+      numberOfProfiles: allUsers.length,
+      listOfAllUsers: allUsers
+    });
   }
+  },
+
+  listProfileById:async(req,res,next)=>{
+    const profile=await profileModel.findById(req.query.id);
+
+    if(profile){
+      return res.status(200).json({
+       
+         profile
+      });
+    }
+  },
+
+  verifyProfile:async(req, res,next)=>{
+    const profile=await profileModel.findById(req.query.id);
+
+    if(profile){
+
+    }
+  
+  },
 
 }
 

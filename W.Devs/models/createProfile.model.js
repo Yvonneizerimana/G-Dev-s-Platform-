@@ -20,11 +20,13 @@ const profileSchema = new Schema({
         },
         phoneNumber: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            isemail: true
         }
     },
     education: {
@@ -94,6 +96,11 @@ const profileSchema = new Schema({
     documentPath:{
         type:Array,
         required:true,
+ },
+ status:{
+type:String,
+default:"Waiting to be approved by admin",
+required:false
  }
 });
 

@@ -1,7 +1,7 @@
 import adminController from "../controllers/admin.controller.js";
 import authValidation from "../middlewares/authValidation.js"
 import { otpValidation } from "../utils/validation.js";
-import userController from '../controllers/user.controller.js'
+import userController from '../controllers/admin.controller.js'
 import checkUsers from "../utils/authCheck.js";
 import express from 'express';
 const app= express();
@@ -18,6 +18,7 @@ adminRouter.route('/resetPassword/:resetToken').post(adminController.resetPasswo
 adminRouter.route('/logout').get(adminController.logout);
 
 
-adminRouter.route('/listOfUsers').get(checkUsers.admin,userController.listUsers)
+adminRouter.route('/listOfAllUsers').get(userController.listOfAllUsers)
+adminRouter.route('/listProfileById').get(userController.listProfileById)
 
-export default adminRouter
+export default adminRouter  

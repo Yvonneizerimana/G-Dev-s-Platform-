@@ -55,6 +55,7 @@ const profileController = {
                    res.status(201).json({
                     message: "Profile created successfully. Please wait for admin approval in order to be in public.",
                     
+                    
                 });
             }
         } catch (error) {
@@ -70,6 +71,7 @@ const profileController = {
         const profile = await profileModel.findByIdAndUpdate({_id:req.query.id});
         if(profile){
             res.status(200).json({
+                Status: profile.status,
                 profile
             });
         } else {
@@ -118,7 +120,7 @@ const profileController = {
 
     //delete profile
 
-    
+
     deleteProfile: asyncWrapper(async(req,res,next)=>{
         const profile = await profileModel.findByIdAndDelete({_id:req.query.id});
         if(profile){
