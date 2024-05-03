@@ -20,5 +20,8 @@ adminRouter.route('/logout').get(adminController.logout);
 
 adminRouter.route('/listOfAllUsers').get(userController.listOfAllUsers)
 adminRouter.route('/listProfileById').get(userController.listProfileById)
+adminRouter.route('/verifyProfile').get(userController.verifyProfile)
+adminRouter.route('/approved').get(userController.approved)
+adminRouter.route('/rejected').get(userController.rejected)
 
 export default adminRouter  

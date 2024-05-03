@@ -19,9 +19,9 @@ userRouter.route('/forgotPassword').post(userController.forgotPassword)
 userRouter.route('/resetPassword/:resetToken').post(userController.resetPassword)
 userRouter.route('/logout').get(userController.logout);
 
-userRouter.route('/profile').post(profileValidation,profile.array('uploadDocuments', 10),profileController.createProfile);
+userRouter.route('/profile').post(profile.array('uploadDocuments', 10),profileController.createProfile);
 userRouter.route('/viewProfile').get(profileController.viewProfile); 
-userRouter.route('/updateProfile').put(profileValidation,profile.array('uploadDocuments', 10),profileController.updateProfile); 
+userRouter.route('/updateProfile').put(profile.array('uploadDocuments', 10),profileController.updateProfile); 
 userRouter.route('/deleteProfile').delete(profileController.deleteProfile); 
 
 

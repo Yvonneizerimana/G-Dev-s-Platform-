@@ -8,6 +8,8 @@ import configurations from '../configs/index.js'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import fs from 'fs'
+
 
 
 export const admin = {
@@ -256,15 +258,104 @@ logout: (req, res) => {
     }
   },
 
-  verifyProfile:async(req, res,next)=>{
-    const profile=await profileModel.findById(req.query.id);
-
-    if(profile){
-
-    }
   
+ verifyProfile:async(req, res, next)=> {
+    try {
+        const document = await profileModel.findOne({ uploadDocuments: req.query.file });
+        
+        if (!document) {
+            return res.status(404).json({
+                message: "Document not found"
+            });
+        }
+if(document){
+        const fileContents = []; 
+
+      
+        for (const filePath of document.documentPath) {
+            
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({
+                    message: `File not found at path: ${filePath}`
+                });
+            }
+
+            
+            const fileContent = fs.readFileSync(filePath,'utf8');
+            
+          
+            fileContents.push({ filePath, content: fileContent });
+        }
+//change status to true if profile verfied well
+
+         document.status="Profile in review"
+         await document.save();
+
+//get response to admin
+
+        res.status(200).json({
+        
+            message: 'File contents retrieved successfully',
+            files: fileContents
+        });
+        
+      }
+      
+    } catch (error) {
+        
+        console.error('Error:', error);
+        res.status(500).json({
+            message: `Internal server error: ${error.message}`
+        });
+    }
   },
 
-}
 
-export default admin;
+  //approve profile
+
+   approved:async(req,res)=>{
+    const profile = await profileModel.findOne({ _id: req.query.id});
+    if (profile.status === 'Profile in review'){
+      const sendGridKey = configurations.SENDGRID_KEY;
+      sgMail.setApiKey(sendGridKey);
+
+      const mailOptions = {
+        from: 'yvannyizerimana@gmail.com', // sender address
+        to: profile.personalInformation.email, // receiver address
+        subject: 'Profile Approved', // Subject line
+        html: `your account has verfied and posted to public` // email body
+      };
+
+      await sgMail.send(mailOptions);
+      console.log('Email sent successfully');
+      res.status(200).json({message:'profile approved'});
+    }
+    profile.status ="approved";
+    await profile.save();
+  },
+
+    //reject profile
+
+    rejected:async(req,res)=>{
+      const profile = await profileModel.findOne({ _id: req.query.id});
+      if (profile.status === "Profile in reveiew"){
+        const sendGridKey = configurations.SENDGRID_KEY;
+        sgMail.setApiKey(sendGridKey);
+  
+        const mailOptions = {
+          from: 'yvannyizerimana@gmail.com', // sender address
+          to: profile.personalInformation.email, // receiver address
+          subject: 'Profile Rejected', // Subject line
+          html: `thank you for your time, after carefuly consideration <br> we regerete to inform you that your profile<br> has rejected and we encourage to keep learning<br> our platform will be ready to receive your profile next.  ` // email body
+        };
+  
+        await sgMail.send(mailOptions);
+        console.log('Email sent successfully');
+        res.status(200).json({message:'profile rejected'});
+      }
+    profile.status ="rejected";
+    await profile.save();
+    }
+
+}
+export default admin 
