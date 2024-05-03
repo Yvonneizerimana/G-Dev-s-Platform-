@@ -5,7 +5,6 @@ import { otpValidation } from "../utils/validation.js";
 import express from 'express';
 import profileController from '../controllers/createProfile.controller.js'
 import profile from '../utils/uploadDocument.js';
-import profileValidation from "../middlewares/profileValidation.js";
 const app= express();
 app.use(express.json)
 

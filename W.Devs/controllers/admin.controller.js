@@ -247,6 +247,16 @@ logout: (req, res) => {
   }
   },
 
+  listUsersByStatus:async(req,res,next)=>{
+    const allUsers=await profileModel.find({status:req.query.status});
+    if(allUsers){
+      return res.status(200).json({
+        numberOfProfiles: allUsers.length,
+        listOfAllUsers: allUsers
+      });
+    }
+  },
+
   listProfileById:async(req,res,next)=>{
     const profile=await profileModel.findById(req.query.id);
 
@@ -258,7 +268,29 @@ logout: (req, res) => {
     }
   },
 
-  
+  updateProfile:async(req,res,next)=>{
+    const profile=await profileModel.findByIdAndUpdate(req.query.id);
+    if(profile){
+      profile.status=req.body.status;
+      const savedProfile=await profile.save();
+      if(savedProfile){
+        return res.status(200).json({
+          message: "Status updated successfully",
+          profile:savedProfile
+        });
+      }
+    }
+  },
+  deleProfile:async(req,res,next) => {
+    const profile=await profileModel.findOneAndDelete({status:req.query.status});
+    if(profile){
+      return res.status(200).json({
+        message: "Profile deleted successfully",
+        profile:profile
+      });
+    }
+  },
+
  verifyProfile:async(req, res, next)=> {
     try {
         const document = await profileModel.findOne({ uploadDocuments: req.query.file });
@@ -355,7 +387,9 @@ if(document){
       }
     profile.status ="rejected";
     await profile.save();
-    }
+    },
+
+
 
 }
 export default admin 
