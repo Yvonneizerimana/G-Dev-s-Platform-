@@ -22,6 +22,8 @@ userRouter.route('/profile').post(profile.array('uploadDocuments', 10),profileCo
 userRouter.route('/viewProfile').get(profileController.viewProfile); 
 userRouter.route('/updateProfile').put(profile.array('uploadDocuments', 10),profileController.updateProfile); 
 userRouter.route('/deleteProfile').delete(profileController.deleteProfile); 
+userRouter.route('/viewUserProfile').post(profileController.viewApproved); 
+
 
 
 export default userRouter

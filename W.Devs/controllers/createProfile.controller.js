@@ -134,7 +134,49 @@ const profileController = {
         }
     }),
 
-
-};
+    viewApproved: asyncWrapper(async (req, res, next) => {
+        const search = await profileModel.find({
+            "personalInformation.firstName": req.body.firstName,
+            "personalInformation.lastName": req.body.lastName
+        });
+    
+        if (search.length > 0) {
+            // Assuming status is a property of each profile document
+            const approvedProfiles = search.filter(profile => profile.status === "approved");
+    
+            if (approvedProfiles.length > 0) {
+                res.status(200).json({
+                    profiles: approvedProfiles
+            // "approvedProfiles.personalInformation.firstName",
+            // " approvedProfiles.personalInformation.middleName" ,
+            //  "approvedProfiles.personalInformation.lastName" : req.body.lastName,
+            //  "approvedProfiles.personalInformation.countryCode" : req.body.countryCode,
+            //  "approvedProfiles.personalInformation.phoneNumber" : req.body.phoneNumber,
+            //  "approvedProfiles.personalInformation.email" : req.body.email,
+            //  "approvedProfiles.education.school":req.body.school,
+            // " approvedProfiles.education.degree": req.body.degree,
+            //  "approvedProfiles.education.fieldOfStudy":req.body.fieldOfStudy,
+            // " approvedProfiles.codingExperience.company" :req.body.company,
+            //  "approvedProfiles.codingExperience.position" :req.body.position,
+            //  "approvedProfiles.codingExperience.startDate" : req.body.startDate,
+            // "approvedProfiles.codingExperience.endDate" : req.body.endDate,
+            // "approvedProfiles.codingExperience.description" : req.body.description,
+            // "approvedProfiles.selectLanguage ": req.body.selectLanguage,
+            // "approvedProfiles.selectLevelOfCoding" : req.body.selectLevelOfCoding,
+                    
+                });
+            } else {
+                res.status(404).json({
+                    message: "No approved profiles found"
+                });
+            }
+        } else {
+            res.status(404).json({
+                message: "Profile not found"
+            });
+        }
+    })
+    
+}
 
 export default profileController;
