@@ -105,7 +105,7 @@ export const users = {
   //user sign in
 
   loginUser: async (req, res, next) => {
-    const { email, password } = req.body;
+    const{email,password} = req.body;
     try {
       // Check if email and password are provided
       if (!email || !password) {
@@ -131,19 +131,13 @@ export const users = {
       //   return;
       // }
       // Compare hashed password with user input
-      try {
-        const passwordValid = await bcrypt.compare(password, user.password);
+      
+        const passwordValid= await bcrypt.compare(password,user.password);
         if (!passwordValid) {
           res.status(401).json({ message: "Invalid password" });
           return;
         }
-      } catch (error) {
-        console.error("Error comparing passwords:", error);
-        res.status(500).json({ message: "Error comparing passwords" });
-        return;
-      }
-
-
+    
       // If user and password are valid, generate JWT token
       const accessToken = jwt.sign({
         email: user.email,

@@ -33,6 +33,8 @@ export const admin = {
                 }
                 const otp=otpGenerator()
                 adminModel.otpExpires=Date.now() + 8 * 60 * 1000;
+
+                
                 
                 const addAdmin = new adminModel({
                     firstName: req.body.firstName,
@@ -106,6 +108,7 @@ ValidateOpt:asyncWrapper(async(req,res,next)=>{
         }
     }),
 
+
 //user sign in
 
 loginUser: async (req, res, next) => {
@@ -122,15 +125,15 @@ loginUser: async (req, res, next) => {
       return;
     }
 
-   const validation=await bcrypt.compareSync(password, user.password);
+   const validation=await bcrypt.compare(password, user.password);
    if(!validation){
-    res.status(401).json({ message: "Invalid password" });
+    res.status(401).json({message: "Invalid password" });
    }
     if (user&&validation){
       const accessToken = jwt.sign({
         email: user.email,
         id: user._id
-      }, configurations.TOOKEN_SECRETE, { expiresIn: "3h" });
+      }, configurations.TOOKEN_SECRETE, {expiresIn: "3h"});
 
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
