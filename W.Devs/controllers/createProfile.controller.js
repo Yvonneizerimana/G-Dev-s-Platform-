@@ -38,6 +38,8 @@ const profileController = {
             // Create profile
             const createProfile = await profileModel.create(req.body);
             //sending email containing the username and id of the user
+
+
             const sendGridKey = configurations.SENDGRID_KEY;
       sgMail.setApiKey(sendGridKey);
 
@@ -50,6 +52,8 @@ const profileController = {
 
       await sgMail.send(mailOptions);
       console.log('Email sent successfully');
+
+      
 
             if(createProfile){
                    res.status(201).json({

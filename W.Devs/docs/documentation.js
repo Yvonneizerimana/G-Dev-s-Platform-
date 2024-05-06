@@ -207,28 +207,244 @@ const swaggerDocumentation = {
               }
             }
           },
-          "/admin/listOfAllUsers": {
-            // Admin list of all users route documentation...
+          "/listOfAllUsers": {
+            "get": {
+              "summary": "Retrieve a list of all users",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [],
+              "responses": {
+                "200": {
+                  "description": "A list of users",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Admin"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
-          "/admin/listProfileById": {
-            // Admin list profile by ID route documentation...
+          "/listProfileById": {
+            "get": {
+              "summary": "Retrieve a profile by ID",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to retrieve",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile retrieved successfully",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Admin"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
-          "/admin/verifyProfile": {
-            // Admin verify profile route documentation...
+          "/verifyProfile": {
+            "get": {
+              "summary": "Verify a user profile",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to verify",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile verified successfully"
+                }
+              }
+            }
           },
-          "/admin/approved": {
-            // Admin approve profile route documentation...
+          "/approved": {
+            "get": {
+              "summary": "Approve a user profile",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to approve",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile approved successfully"
+                }
+              }
+            }
           },
-          "/admin/rejected": {
-            // Admin reject profile route documentation...
+          "/rejected": {
+            "get": {
+              "summary": "Reject a user profile",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to reject",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile rejected successfully"
+                }
+              }
+            }
           },
-          "/admin/updateProfile": {
-            // Admin update profile route documentation...
+          "/updateProfile": {
+            "get": {
+              "summary": "Update a user profile",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to update",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "name": "firstName",
+                  "in": "query",
+                  "description": "The first name of the user",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "name": "lastName",
+                  "in": "query",
+                  "description": "The last name of the user",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "name": "email",
+                  "in": "query",
+                  "description": "The email address of the user",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "name": "phoneNumber",
+                  "in": "query",
+                  "description": "The phone number of the user",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "name": "password",
+                  "in": "query",
+                  "description": "The password of the user",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile updated successfully"
+                }
+              }
+            }
           },
-          "/admin/deleteProfile": {
-            // Admin delete profile route documentation...
+          "/deleteProfile": {
+            "get": {
+              "summary": "Delete a user profile",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "query",
+                  "description": "The ID of the profile to delete",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Profile deleted successfully"
+                }
+              }
+            }
           },
-
+          "/listUsersByStatus": {
+            "get": {
+              "summary": "List users by status",
+              "tags": ["Admin"],
+              "security": [{ "bearerAuth": [] }],
+              "parameters": [
+                {
+                  "name": "status",
+                  "in": "query",
+                  "description": "The status of the users to list",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "enum": ["Waiting to be approved by admin", "Approved", "Rejected"]
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "List of users by status"
+                }
+              }
+            }
+          }
+          ,
           "/user/create": {
             "post": {
               "tags": [
@@ -423,22 +639,143 @@ const swaggerDocumentation = {
               "summary": "Create user profile",
               "description": "Create a new profile for the user",
               "consumes": [
-                "multipart/form-data"
+                "multipart/form-data",
+                "application/json"
               ],
 
               "parameters": [
                 {
-            "in": "formData",
-            "name": "file",
-            "type": "file",
-                  "in": "body",
-                  "name": "body",
-                  "description": "Profile object that needs to be created",
+                  "in": "formData",
+                  "name": "personalInformation.firstName",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "personalInformation.middleName",
+                  "type": "string",
                   "required": true,
-                  "schema": {
-                    "$ref": "#/components/schemas/Profile"
-                  }
+                },
+                {
+                  "in": "formData",
+                  "name": "personalInformation.lastName",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "personalInformation.countryCode",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "personalInformation.phoneNumber",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "personalInformation.email",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "education.school",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "education.degree",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "education.fieldOfStudy",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "codingExperience.company",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "codingExperience.position",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "codingExperience.startDate",
+                  "type": "string",
+                  "format": "date",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "codingExperience.endDate",
+                  "type": "string",
+                  "format": "date",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "codingExperience.description",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "selectLanguage",
+                  "type": "string",
+                  "enum": [
+                    "C",
+                    "C++",
+                    "Java",
+                    "Python",
+                    "JavaScript",
+                    "PHP",
+                    "Ruby",
+                    "C#",
+                    "Go",
+                    "Swift",
+                    "Kotlin",
+                    "Rust"
+                  ],
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "selectLevelOfCoding",
+                  "type": "string",
+                  "enum": [
+                    "Beginner",
+                    "Intermediate",
+                    "Advanced"
+                  ],
+                  "required": true
+                },
+                
+                {
+                  "in": "formData",
+                  "name": "codewarUsername",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "in": "formData",
+                  "name": "uploadDocuments",
+                  "type": "file",
+                  "required": true,
+                  "description": "The file to upload"
                 }
+                
               ],
               "responses": {
                 "200": {
@@ -450,6 +787,7 @@ const swaggerDocumentation = {
               }
             }
           },
+          
           "/user/viewProfile": {
             "get": {
               "tags": [
@@ -819,7 +1157,7 @@ const swaggerDocumentation = {
         }
       }
     }
-  };
+  }
   
   export default swaggerDocumentation;
   

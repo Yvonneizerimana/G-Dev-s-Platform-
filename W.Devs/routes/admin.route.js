@@ -2,6 +2,7 @@ import adminController from "../controllers/admin.controller.js";
 import authValidation from "../middlewares/authValidation.js"
 import { otpValidation } from "../utils/validation.js";
 import userController from '../controllers/admin.controller.js'
+import checkUsers from "../utils/authCheck.js";
 import express from 'express';
 const app= express();
 app.use(express.json)
@@ -17,13 +18,13 @@ adminRouter.route('/resetPassword/:resetToken').post(adminController.resetPasswo
 adminRouter.route('/logout').get(adminController.logout);
 
 
-adminRouter.route('/listOfAllUsers').get(userController.listOfAllUsers)
-adminRouter.route('/listProfileById').get(userController.listProfileById)
-adminRouter.route('/verifyProfile').get(userController.verifyProfile)
-adminRouter.route('/approved').get(userController.approved)
-adminRouter.route('/rejected').get(userController.rejected)
-adminRouter.route('/updateProfile').get(userController.updateProfile)
-adminRouter.route('/deleteProfile').get(userController.deleProfile)
-adminRouter.route('/listUsersByStatus').get(userController.listUsersByStatus)
+adminRouter.route('/listOfAllUsers').get(checkUsers.admin,userController.listOfAllUsers)
+adminRouter.route('/listProfileById').get(checkUsers.admin,userController.listProfileById)
+adminRouter.route('/verifyProfile').get(checkUsers.admin,userController.verifyProfile)
+adminRouter.route('/approved').get(checkUsers.admin,userController.approved)
+adminRouter.route('/rejected').get(checkUsers.admin,userController.rejected)
+adminRouter.route('/updateProfile').get(checkUsers.admin,userController.updateProfile)
+adminRouter.route('/deleteProfile').get(checkUsers.admin,userController.deleProfile)
+adminRouter.route('/listUsersByStatus').get(checkUsers.admin,userController.listUsersByStatus)
 
 export default adminRouter  
